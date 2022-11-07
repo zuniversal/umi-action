@@ -1,8 +1,8 @@
 {
   "name": "umi-action",
   "version": "1.0.0",
-  "private": false,
   "description": "react umi action",
+  "type": "module",
   "author": "tvsqzyb",
   "license": "MIT",
   "keyword": [
@@ -21,7 +21,7 @@
   "module": "index.js",
   "types": "index.d.js",
   "scripts": {
-    "build": "npm run build",
+    "build": "vite build --outDir dist/index",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
   "gitHooks": {
@@ -38,6 +38,8 @@
   "devDependencies": {
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
+    "vite": "^3.2.3",
+    "vite-plugin-compression": "^0.5.1",
     "yorkie": "^2.0.0"
   },
   "browserslist": {

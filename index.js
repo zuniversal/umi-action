@@ -16,18 +16,16 @@ export const crudConfigs = [
 
 export const commonConfigs = ['setSearchInfo', 'showFormModal', 'onCancel'];
 
-// 根据相应 models 命名 初始化 相应的带该model前缀的 action 方法
-// 1. 函数显示调用 简化 action 调用方法的编写   副作用的  effects 里 可直接调用传入的 修改相应的同名 reducer 的方法
-// 2. 可选择性使用 自动创建项目通用的 增删改查 相关 aciton
 export const isLoading = props => {
   const {
     config = [],
-      extraLoading = [],
-      path = '',
-      actions = {},
-      defConfig = [],
+    extraLoading = [],
+    path = '',
+    actions = {},
+    defConfig = [],
   } = props;
-  const configs = config.length > 0 ? config : [...crudConfigs, ...extraLoading];
+  const configs =
+    config.length > 0 ? config : [...crudConfigs, ...extraLoading];
   return configs.some(asyncSuffix => {
     return actions[`${path}/${asyncSuffix}`];
   });
@@ -61,19 +59,20 @@ export const init = (prefix, noDefault) => {
     config.forEach(types => (actions[types] = turnAction(types)));
     return actions;
   };
-  const createDispatch = (model) => dispatch => {
+  const createDispatch = model => dispatch => {
     const actions = Object.keys(model.reducers);
     const asyncActions = Object.keys(model.effects);
     const dispatchActions = {};
-    [
-      ...actions,
-      ...asyncActions,
-    ].forEach(types => (dispatchActions[types] = data => dispatch({
-      type: `${prefix}/${types}`,
-      payload: data,
-    })));
+    [...actions, ...asyncActions].forEach(
+      types =>
+        (dispatchActions[types] = data =>
+          dispatch({
+            type: `${prefix}/${types}`,
+            payload: data,
+          })),
+    );
     return dispatchActions;
-  }
+  };
 
   return {
     names: 'zyb',
