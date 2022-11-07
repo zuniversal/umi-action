@@ -12,7 +12,7 @@
   "homepage": ".",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zuniversal/react-smartform"
+    "url": "https://github.com/zuniversal/umi-action"
   },
   "files": [
     "build"
