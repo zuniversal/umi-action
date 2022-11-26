@@ -1,12 +1,15 @@
 {
   "name": "umi-action",
-  "version": "1.0.0",
-  "description": "react umi action",
+  "version": "1.0.1",
+  "description": "react umi dva action dispatch",
   "type": "module",
   "author": "tvsqzyb",
   "license": "MIT",
   "keyword": [
     "umi",
+    "dva",
+    "action",
+    "dispatch",
     "react"
   ],
   "homepage": ".",
@@ -15,7 +18,13 @@
     "url": "https://github.com/zuniversal/umi-action"
   },
   "files": [
-    "build"
+    "assets",
+    "build",
+    "dist",
+    "lib",
+    "examples",
+    "packages",
+    "src"
   ],
   "main": "index.js",
   "module": "index.js",

@@ -46,7 +46,6 @@ export const init = (prefix, noDefault) => {
   const transferActions = (config = []) => {
     const actions = {};
     config.forEach(types => (actions[types] = createAction(types)));
-    console.log(' actionsactions ： ', actions);
     return actions;
   };
   const createCRUD = (config = []) => {
