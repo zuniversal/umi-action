@@ -8,7 +8,7 @@ import { connect } from 'umi';
 
 const Demo = props => {
   const getListAsync = params => {
-    // 组件props自动注入对应action方法
+    // 组件props自动注入对应简化后可以被调用的action方法
     props.getListAsync(params);
   };
   useEffect(() => {

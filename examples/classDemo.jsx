@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   actions,
   mapStateToProps,
   mapDispatchToProps,
 } from './models/template';
+import SmartHoc from './SmartHoc';
 import { connect } from 'umi';
 
 @connect(mapStateToProps, mapDispatchToProps)
+// 结合自定义 高阶组件 自动注入相关action方法
+@SmartHoc({
+  actions,
+})
 class Demo extends PureComponent {
   getListAsync = params => {
-    // 组件自动注入对应action方法
+    // 组件自动注入获取到对应简化后可以被调用action方法
     this.props.getListAsync(params);
   };
 

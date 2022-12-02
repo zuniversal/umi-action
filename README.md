@@ -1,7 +1,7 @@
-# umi project
+# umi action project
 
 
-## 库说明
+## 工具库说明
 
 ```
   基于 dva 根据相应 models 命名 初始化 相应的带该model前缀的 action dispatch 方法，利用 函数柯理化 传入命名空间，创建生成相关方法
@@ -19,8 +19,10 @@ $ npm i umi-action
 $ yarn add umi-action
 ```
 
-#### 使用例子在源码包里的 examples 目录下 
-  * [JSX](https://github.com/zuniversal/umi-action/blob/master/examples/template.js)
+#### 使用例子在 examples 目录下 
+  * [model](https://github.com/zuniversal/umi-action/blob/master/examples/model/template.js)
+  * [classDemo](https://github.com/zuniversal/umi-action/blob/master/examples/model/classDemo.js)
+  * [funcDemo](https://github.com/zuniversal/umi-action/blob/master/examples/model/funcDemo.js)
 
   
 #### model 文件定义使用
@@ -67,34 +69,73 @@ export default model;
 ```
 
 
+#### SmartHoc 高阶组件 - 使用函数柯理化方式调用
+
+```jsx
+import React from 'react';
+
+export default ({ actions }) => Com => {
+  class SmartHoc extends React.Component {
+    constructor(props) {
+      super(props);
+      const createActions = params => {
+        const actionObj = {};
+        Object.keys(actions).forEach(
+          key =>
+            (actionObj[key] = params =>
+              this.props.dispatch(actions[key](params))),
+        );
+        return actionObj;
+      };
+      this.actionProps = createActions();
+    }
+
+    render() {
+      return <Com {...this.props} {...this.actionProps} />;
+    }
+  }
+
+  return SmartHoc;
+};
+```
+
+
 #### class 类组件内使用
 
 ```jsx
-import React, { useEffect } from 'react';
-import { actions, mapStateToProps, mapDispatchToProps, } from '@/models/template';
-import { connect } from 'umi';
-
-@connect(
+import React from 'react';
+import {
+  actions,
   mapStateToProps,
   mapDispatchToProps,
-)
+} from './models/template';
+import SmartHoc from './SmartHoc';
+import { connect } from 'umi';
+
+@connect(mapStateToProps, mapDispatchToProps)
+// 结合自定义 高阶组件 自动注入相关action方法
+@SmartHoc({
+  actions
+})
 class Demo extends PureComponent {
   getListAsync = params => {
-    // 组件自动注入对应action方法
+    // 组件自动注入获取到对应简化后可以被调用action方法
     this.props.getListAsync(params);
-  }
+  };
 
   render() {
     return (
       <div className="demo">
         Demo
-        <button type="primary" onClick={this.getListAsync}>getListAsync</button>
+        <button type="primary" onClick={this.getListAsync}>
+          getListAsync
+        </button>
       </div>
     );
   }
 }
 
-export default Demo
+export default Demo;
 ```
 
 
@@ -102,14 +143,18 @@ export default Demo
 
 ```jsx
 import React, { useEffect } from 'react';
-import { actions, mapStateToProps, mapDispatchToProps, } from '@/models/template';
+import {
+  actions,
+  mapStateToProps,
+  mapDispatchToProps,
+} from '@/models/template';
 import { connect } from 'umi';
 
 const Demo = props => {
   const getListAsync = params => {
-    // 组件props自动注入对应action方法
+    // 组件props自动注入对应简化后可以被调用的action方法
     props.getListAsync(params);
-  }
+  };
   useEffect(() => {
     getListAsync({});
   }, []);
@@ -117,29 +162,34 @@ const Demo = props => {
   return (
     <div className="demo">
       Demo
-      <button type="primary" onClick={getListAsync}>getListAsync</button>
+      <button type="primary" onClick={getListAsync}>
+        getListAsync
+      </button>
     </div>
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Demo);
+export default connect(mapStateToProps, mapDispatchToProps)(Demo);
 ```
 
 
 #### 主要提供如下方法 其它方法详细作用请查看源码
 
 ```js
-createActions// 生成 多个 action
-createAction// 生成 单个 action
-createDispatch// 生成 dispatch
+  // 生成 多个 action
+  createActions: (config = [])
 
-transferActions
-createCRUD
-turnAction
-batchTurn
+  // 根据 model 模型内的方法生成 对应简化调用的 action
+  createAction: (model)
+
+  // 生成 dispatch
+  createDispatch: (config = [])
+
+  // 生成 增删改查相关 action 方法
+  createCRUD: (asyncConfig = [], config = []) 
+
+  // 根据传入的配置方法 批量生成 action 方法
+  batchTurn: (config = []) 
 ```
 
 
@@ -154,6 +204,7 @@ const otherActions = [
   'getUserListAsync',
   'getUserAsync',
   'addUserAsync',
+  'editUserAsync',
   'removeUserAsync',
 ];
 
