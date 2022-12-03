@@ -26,11 +26,12 @@
     "packages",
     "src"
   ],
-  "main": "index.js",
+  "main": "lib/index.umd.js",
   "module": "index.js",
   "types": "index.d.js",
   "scripts": {
-    "build": "vite build --outDir dist/index",
+    "buildv": "vite build --outDir dist/index",
+    "build": "vue-cli-service build --target lib --name index --dest lib --entry ./index.js",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
   "gitHooks": {
@@ -62,5 +63,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@vue/cli-service": "^5.0.8",
+    "vue-template-compiler": "^2.7.14"
   }
 }
