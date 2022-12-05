@@ -19,6 +19,21 @@ $ npm i umi-action
 $ yarn add umi-action
 ```
 
+
+#### 方法调用方式简化如下，免去 dispatch 方法调用 及 type 类型指定 payload 参数指定。直接使用model里定义的相应方法名调用即可
+
+```js
+  props.dispatch({
+    type: 'getUserListAsync',
+    payload: params,
+  }) 
+  => 
+  props.getUserListAsync({
+    ...params,
+  }) 
+```
+
+
 #### 使用例子在 examples 目录下 
   * [model](https://github.com/zuniversal/umi-action/blob/master/examples/model/template.js)
   * [classDemo](https://github.com/zuniversal/umi-action/blob/master/examples/model/classDemo.js)
